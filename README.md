@@ -143,8 +143,8 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 https://goldenjumper.wordpress.com/tag/ta-lib/
 
    graphiviz which is required to plot the XGBoost tree diagram, can be installed with the following command: 
-   Windows: 
-   ```conda install python-graphviz```
-   Mac/Linux: 
-   ```conda install graphviz```
+   Windows: <br />
+   ```conda install python-graphviz```<br />
+   Mac/Linux: <br />
+   ```conda install graphviz```<br />
 
