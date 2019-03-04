@@ -25,25 +25,23 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 
 ## Installation instructions:
 
-CMake, OpenMPI
-
 1. Installation of system packages CMake, OpenMPI on Mac
 
-	- brew install cmake openmpi
+```brew install cmake openmpi```
 
 2. Activate environemnt and install gym under this environment
 
-	pip install gym
+```pip install gym```
 
 3. Download Official Baseline Package
 
     Clone the repo:
 
-    git clone https://github.com/openai/baselines.git
+    ```git clone https://github.com/openai/baselines.git
 	
     cd baselines
 	
-	pip install -e .
+    pip install -e .```
 
 4. Install Tensorflow
 
@@ -54,10 +52,10 @@ https://www.tensorflow.org/install/
 In short, after environment activation, Tensorflow can be installed with these commands: 
 
 Tensorflow for CPU:
-pip3 install --upgrade tensorflow
+```pip3 install --upgrade tensorflow```
 
 Tensorflow for GPU: 
-pip3 install --upgrade tensorflow-gpu
+```pip3 install --upgrade tensorflow-gpu```
 
 Installing Tensorflow GPU allows faster training time if your machine has nVidia GPU(s) built-in. 
 However, Tensorflow GPU version requires the installation of the right cuDNN and CUDA, these pages provide instructions on how it can be done: 
@@ -70,11 +68,11 @@ However, Tensorflow GPU version requires the installation of the right cuDNN and
 	
 5. Place the StarTrader and StarTraderTest folders in this repository to your machine's OpenAI Gym's environment folder: 
 
-	gym/envs/
+   gym/envs/
 	
 6. Replace the __init__.py file in the following folder with the __ini__.py provided in this repository: 
 
-	gym/envs/__init__.py
+   gym/envs/__init__.py
   
 7. Place run.py in baselines folder to the folder where you want to execute run.py, for example:
 
