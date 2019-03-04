@@ -2,7 +2,7 @@
 
 [image1]: https://github.com/jiewwantan/StarTrader/blob/master/training_episodes.gif "Training episodes"
 
-# **StarTrader:** <br />Intelligent Trading Agent Development Using Deep Reinforcement Learning
+# **StarTrader:** <br />Intelligent Trading Agent Development<br /> with Deep Reinforcement Learning
 
 ### Introduction
 
