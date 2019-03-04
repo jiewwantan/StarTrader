@@ -120,7 +120,9 @@ Linux Ubuntu 16.04 & Windows 10 Pro
       ```python -m run --alg=ddpg --env=StarTrader-v0 --network=mlp --num_timesteps=2e4```
 
       To test agent:<br />
-      ```python -m run --alg=ddpg --env=StarTraderTest-v0 --network=mlp --num_timesteps=2e3```
+      ```python -m run --alg=ddpg --env=StarTraderTest-v0 --network=mlp --num_timesteps=2e3 --load_path='./model/DDPG_trained_model_2```
+      
+      If you have trained a better model, replace ```DDPG_trained_model_2``` with your new model. 
 
 ## Special intructions: 
 1. Depends on machine configuration, the following intallation maybe necessary: 
