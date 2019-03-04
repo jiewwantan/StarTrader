@@ -27,23 +27,23 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 
 1. Installation of system packages CMake, OpenMPI on Mac
 
-```brew install cmake openmpi```
+   ```brew install cmake openmpi```
 
 2. Activate environemnt and install gym under this environment
-
-```pip install gym```
+ 
+   ```pip install gym```
 
 3. Download Official Baseline Package
 
-Clone the repo:
+   Clone the repo:
 
-```
-git clone https://github.com/openai/baselines.git
+   ```
+   git clone https://github.com/openai/baselines.git
 
-cd baselines
+   cd baselines
 
-pip install -e .
-```
+   pip install -e .
+   ```
 
 4. Install Tensorflow
 
