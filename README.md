@@ -1,6 +1,6 @@
 [//]: # (Image References)
 
-[image1]: https://user-images.githubusercontent.com/10624937/42135623-e770e354-7d12-11e8-998d-29fc74429ca2.gif "Trained Agent"
+[image1]: https://github.com/jiewwantan/StarTrader/blob/master/training_episodes.gif "Training episodes"
 
 # StarTrader <br />An Intelligent Trading Agent Development Using Deep Reinforcement Learning
 
@@ -12,7 +12,7 @@ Two Gym environments are created to serve the purpose, one for training (StarTra
 
 A portfolio of five stocks (out of 27 Dow Jones Industrial Average stocks) are selected based on non-correlation factor. StarTrader will trade these five non-correlated stocks by learning to maximize total asset (portfolio value + current account balance) as its goal. During the trading process, StarTrader-v0 will also optimize the portfolio by deciding how many stock units to trade for each of the five stocks.
 
-![Trained Agent][image1]
+![Training episodes][image1]
 
 ## Prerequisites
 
