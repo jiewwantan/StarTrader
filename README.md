@@ -47,79 +47,79 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 
 4. Install Tensorflow
 
-There are several ways of installing Tensorflow, this page provide a good description on how it can be done with system OS, Python version and GPU availability taken into consideration.
+   There are several ways of installing Tensorflow, this page provide a good description on how it can be done with system OS, Python    version and GPU availability taken into consideration.
 
-https://www.tensorflow.org/install/
+   https://www.tensorflow.org/install/
 
-In short, after environment activation, Tensorflow can be installed with these commands: 
+   In short, after environment activation, Tensorflow can be installed with these commands: 
 
-Tensorflow for CPU:
-```pip3 install --upgrade tensorflow```
+   Tensorflow for CPU:
+   ```pip3 install --upgrade tensorflow```
 
-Tensorflow for GPU: 
-```pip3 install --upgrade tensorflow-gpu```
+   Tensorflow for GPU: 
+   ```pip3 install --upgrade tensorflow-gpu```
 
-Installing Tensorflow GPU allows faster training time if your machine has nVidia GPU(s) built-in. 
-However, Tensorflow GPU version requires the installation of the right cuDNN and CUDA, these pages provide instructions on how it can be done: 
+   Installing Tensorflow GPU allows faster training time if your machine has nVidia GPU(s) built-in. 
+   However, Tensorflow GPU version requires the installation of the right cuDNN and CUDA, these pages provide instructions on how it can  be done: 
 
-[Ubuntu](https://www.tensorflow.org/install/install_linux)
+   [Ubuntu](https://www.tensorflow.org/install/install_linux)
 
-[MacOS](https://www.tensorflow.org/install/install_mac (Tensorflow 1.2 no longer provides GPU support for MacOS) )
+   [MacOS](https://www.tensorflow.org/install/install_mac (Tensorflow 1.2 no longer provides GPU support for MacOS) )
 
-[Windows](https://www.tensorflow.org/install/install_windows)
+   [Windows](https://www.tensorflow.org/install/install_windows)
 	
 5. Place the StarTrader and StarTraderTest folders in this repository to your machine's OpenAI Gym's environment folder: 
 
-gym/envs/
+   gym/envs/
 	
 6. Replace the __init__.py file in the following folder with the __ini__.py provided in this repository: 
 
-gym/envs/__init__.py
+   gym/envs/__init__.py
   
 7. Place run.py in baselines folder to the folder where you want to execute run.py, for example:
 
-From Gym's installation: 
-baselines/baselines/run.py
+   From Gym's installation: 
+   baselines/baselines/run.py
 
-To: 
-run.py
+   To: 
+   run.py
 	
 8. Place 'data' folder to the folder where run.py resides
   
-/data/
+   /data/
    
 9. Replace ddpg.py from Gym's installation to the ddpg.py in this repository:
 
-In your machine Gym's installation: 
-baselines/baselines/ddpg/ddpg.py
+   In your machine Gym's installation: 
+   baselines/baselines/ddpg/ddpg.py
 
-replaced by the ddpg.py in repository: 
-baselines/baselines/ddpg/ddpg.py
+   replaced by the ddpg.py in repository: 
+   baselines/baselines/ddpg/ddpg.py
 
 10. Replace ddpg_learner.py from Gym's installation to the ddpg_learner.py in this repository:
 
-In your machine Gym's installation: 
-baselines/baselines/ddpg/ddpg_learner.py
+   In your machine Gym's installation: 
+   baselines/baselines/ddpg/ddpg_learner.py
 
-replaced by the ddpg_learner.py in repository: 
-baselines/baselines/ddpg/ddpg_learner.py
+   replaced by the ddpg_learner.py in repository: 
+   baselines/baselines/ddpg/ddpg_learner.py
    
 11. Place feature_select.py and data_preprocessing.py in this repository into the same folder as run.py
 
 12. Place the following folders in this repository into the folder where your run.py resides
 
-/test_result/
-/train_result/
-/model/
+   /test_result/
+   /train_result/
+   /model/
     
-You do not need to include the folders' content, they will be generated when the program executes. If contents are included, they will be replaced once program executes.
+   You do not need to include the folders' content, they will be generated when the program executes. If contents are included, they will be replaced once program executes.
 
 12. Under the folder where run.py resides enter the following command:
 
-To train agent:
-```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
+   To train agent:
+   ```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
 
-To test agent:
-```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
+   To test agent:
+   ```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
 
 
