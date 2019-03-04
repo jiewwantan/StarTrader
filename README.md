@@ -41,7 +41,8 @@ Clone the repo:
 
 cd baselines
 
-pip install -e .```
+pip install -e .
+```
 
 4. Install Tensorflow
 
