@@ -125,7 +125,7 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 ## Special intructions: 
 1. Depends on machine configuration, the following intallation maybe necessary: 
 
-   ```pip3 install opencv-python```
-   ```pip3 install lockfile```
-   ```pip3 install -U numpy```
-   ```pip3 install mujoco-py==0.5.7```
+   ```pip3 install opencv-python```<br />
+   ```pip3 install lockfile```<br />
+   ```pip3 install -U numpy```<br />
+   ```pip3 install mujoco-py==0.5.7```<br />
