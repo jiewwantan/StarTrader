@@ -53,10 +53,10 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 
    In short, after environment activation, Tensorflow can be installed with these commands: 
 
-   Tensorflow for CPU:
+   Tensorflow for CPU:<br />
    ```pip3 install --upgrade tensorflow```
 
-   Tensorflow for GPU: 
+   Tensorflow for GPU: <br />
    ```pip3 install --upgrade tensorflow-gpu```
 
    Installing Tensorflow GPU allows faster training if your machine has nVidia GPU(s) built-in. 
@@ -78,48 +78,54 @@ Linux Ubuntu 16.04 & Windows 10 Pro
   
 7. Place run.py in baselines folder to the folder where you want to execute run.py, for example:
 
-   From Gym's installation: 
+   From Gym's installation: <br />
    ```baselines/baselines/run.py```
 
-   To: 
+   To: <br />
    ```run.py```
 	
 8. Place 'data' folder to the folder where run.py resides
   
    ```/data/```
    
-9. Replace ddpg.py from Gym's installation to the ddpg.py in this repository:
+9. Replace ddpg.py from Gym's installation with the ddpg.py in this repository:
 
-   In your machine Gym's installation: 
+   In your machine Gym's installation: <br />
    ```baselines/baselines/ddpg/ddpg.py```
 
-   replaced by the ddpg.py in repository: 
+   replaced by the ddpg.py in repository: <br />
    ```baselines/baselines/ddpg/ddpg.py```
 
-10. Replace ddpg_learner.py from Gym's installation to the ddpg_learner.py in this repository:
+10. Replace ddpg_learner.py from Gym's installation with the ddpg_learner.py in this repository:
 
-      In your machine Gym's installation: 
+      In your machine Gym's installation: <br />
       ```baselines/baselines/ddpg/ddpg_learner.py```
 
-      replaced by the ddpg_learner.py in repository: 
+      replaced by the ddpg_learner.py in repository: <br />
       ```baselines/baselines/ddpg/ddpg_learner.py```
    
 11. Place feature_select.py and data_preprocessing.py in this repository into the same folder as run.py
 
 12. Place the following folders in this repository into the folder where your run.py resides
 
-     ```/test_result/```
-     ```/train_result/```
-     ```/model/```
+     ```/test_result/```<br />
+     ```/train_result/```<br />
+     ```/model/```<br />
     
       You do not need to include the folders' content, they will be generated when the program executes. If contents are included, they  will be replaced once program executes.
 
 12. Under the folder where run.py resides enter the following command:
 
-      To train agent:
+      To train agent:<br />
       ```python -m run --alg=ddpg --env=StarTrader-v0 --network=mlp --num_timesteps=2e4```
 
-      To test agent:
+      To test agent:<br />
       ```python -m run --alg=ddpg --env=StarTrader-v0 --network=mlp --num_timesteps=2e3```
 
+## Special intructions: 
+1. Depends on machine configuration, the following intallation maybe necessary: 
 
+   ```pip3 install opencv-python```
+   ```pip3 install lockfile```
+   ```pip3 install -U numpy```
+   ```pip3 install mujoco-py==0.5.7```
