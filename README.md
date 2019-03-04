@@ -98,21 +98,21 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 
 10. Replace ddpg_learner.py from Gym's installation to the ddpg_learner.py in this repository:
 
-   In your machine Gym's installation: 
-   baselines/baselines/ddpg/ddpg_learner.py
+      In your machine Gym's installation: 
+      baselines/baselines/ddpg/ddpg_learner.py
 
-   replaced by the ddpg_learner.py in repository: 
-   baselines/baselines/ddpg/ddpg_learner.py
+      replaced by the ddpg_learner.py in repository: 
+      baselines/baselines/ddpg/ddpg_learner.py
    
 11. Place feature_select.py and data_preprocessing.py in this repository into the same folder as run.py
 
 12. Place the following folders in this repository into the folder where your run.py resides
 
-   /test_result/
-   /train_result/
-   /model/
+     /test_result/
+     /train_result/
+     /model/
     
-   You do not need to include the folders' content, they will be generated when the program executes. If contents are included, they will be replaced once program executes.
+      You do not need to include the folders' content, they will be generated when the program executes. If contents are included, they  will be replaced once program executes.
 
 12. Under the folder where run.py resides enter the following command:
 
