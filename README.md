@@ -35,13 +35,13 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 
 3. Download Official Baseline Package
 
-    Clone the repo:
+Clone the repo:
 
-    ```git clone https://github.com/openai/baselines.git
-	
-    cd baselines
-	
-    pip install -e .```
+```git clone https://github.com/openai/baselines.git
+
+cd baselines
+
+pip install -e .```
 
 4. Install Tensorflow
 
@@ -68,56 +68,56 @@ However, Tensorflow GPU version requires the installation of the right cuDNN and
 	
 5. Place the StarTrader and StarTraderTest folders in this repository to your machine's OpenAI Gym's environment folder: 
 
-   gym/envs/
+gym/envs/
 	
 6. Replace the __init__.py file in the following folder with the __ini__.py provided in this repository: 
 
-   gym/envs/__init__.py
+gym/envs/__init__.py
   
 7. Place run.py in baselines folder to the folder where you want to execute run.py, for example:
 
-   From Gym's installation: 
-   baselines/baselines/run.py
-   
-   To: 
-   run.py
+From Gym's installation: 
+baselines/baselines/run.py
+
+To: 
+run.py
 	
 8. Place 'data' folder to the folder where run.py resides
   
-   /data/
+/data/
    
 9. Replace ddpg.py from Gym's installation to the ddpg.py in this repository:
 
-   In your machine Gym's installation: 
-   baselines/baselines/ddpg/ddpg.py
-   
-   replaced by the ddpg.py in repository: 
-   baselines/baselines/ddpg/ddpg.py
+In your machine Gym's installation: 
+baselines/baselines/ddpg/ddpg.py
+
+replaced by the ddpg.py in repository: 
+baselines/baselines/ddpg/ddpg.py
 
 10. Replace ddpg_learner.py from Gym's installation to the ddpg_learner.py in this repository:
 
-   In your machine Gym's installation: 
-   baselines/baselines/ddpg/ddpg_learner.py
-   
-   replaced by the ddpg_learner.py in repository: 
-   baselines/baselines/ddpg/ddpg_learner.py
+In your machine Gym's installation: 
+baselines/baselines/ddpg/ddpg_learner.py
+
+replaced by the ddpg_learner.py in repository: 
+baselines/baselines/ddpg/ddpg_learner.py
    
 11. Place feature_select.py and data_preprocessing.py in this repository into the same folder as run.py
 
 12. Place the following folders in this repository into the folder where your run.py resides
 
-    /test_result/
-    /train_result/
-    /model/
+/test_result/
+/train_result/
+/model/
     
-    You do not need to include the folders' content, they will be generated when the program executes. If contents are included, they will be replaced once program executes.
+You do not need to include the folders' content, they will be generated when the program executes. If contents are included, they will be replaced once program executes.
 
 12. Under the folder where run.py resides enter the following command:
 
-	To train agent:
-  ```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
-  
-  To test agent:
-  ```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
-  
+To train agent:
+```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
+
+To test agent:
+```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
+
 
