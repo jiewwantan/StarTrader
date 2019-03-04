@@ -37,7 +37,8 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 
 Clone the repo:
 
-```git clone https://github.com/openai/baselines.git
+```
+git clone https://github.com/openai/baselines.git
 
 cd baselines
 
