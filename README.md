@@ -116,10 +116,10 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 
 12. Under the folder where run.py resides enter the following command:
 
-   To train agent:
-   ```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
+      To train agent:
+      ```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
 
-   To test agent:
-   ```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
+      To test agent:
+      ```python -m run --alg=ddpg --env=StarTrader-v0 --network=lstm --num_timesteps=2e4```
 
 
