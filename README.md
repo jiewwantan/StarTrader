@@ -17,7 +17,8 @@ A portfolio of five stocks (out of 27 Dow Jones Industrial Average stocks) are s
 
 ### Testing agent on one episode 
 No learning or model refinement, purely on testing the trained model. 
-Trading agent survived the major market correction in 2018 with 1.16 Sharpe ratio. 
+Trading agent survived the major market correction in 2018 with 1.16 Sharpe ratio. <br />
+
 ![Testing trained model with one episode][image2]
 
 ## Prerequisites
