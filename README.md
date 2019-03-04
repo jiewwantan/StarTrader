@@ -47,7 +47,7 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 
 4. Install Tensorflow
 
-   There are several ways of installing Tensorflow, this page provide a good description on how it can be done with system OS, Python    version and GPU availability taken into consideration.
+   There are several ways of installing Tensorflow, this page provide a good description on how it can be done with system OS, Python version and GPU availability taken into consideration.
 
    https://www.tensorflow.org/install/
 
@@ -59,8 +59,8 @@ Linux Ubuntu 16.04 & Windows 10 Pro
    Tensorflow for GPU: 
    ```pip3 install --upgrade tensorflow-gpu```
 
-   Installing Tensorflow GPU allows faster training time if your machine has nVidia GPU(s) built-in. 
-   However, Tensorflow GPU version requires the installation of the right cuDNN and CUDA, these pages provide instructions on how it can  be done: 
+   Installing Tensorflow GPU allows faster training if your machine has nVidia GPU(s) built-in. 
+   However, Tensorflow GPU version requires the installation of the right cuDNN and CUDA, these pages provide instructions to ensure the right version is installed: 
 
    [Ubuntu](https://www.tensorflow.org/install/install_linux)
 
@@ -68,7 +68,7 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 
    [Windows](https://www.tensorflow.org/install/install_windows)
 	
-5. Place the StarTrader and StarTraderTest folders in this repository to your machine's OpenAI Gym's environment folder: 
+5. Place StarTrader and StarTraderTest folders in this repository to your machine's OpenAI Gym's environment folder: 
 
    gym/envs/
 	
