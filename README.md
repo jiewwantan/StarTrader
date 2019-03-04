@@ -142,7 +142,7 @@ Linux Ubuntu 16.04 & Windows 10 Pro
 2. The technical analysis library, TA-Lib may be tricky to install in some machines. The following page is a handy guide: 
 https://goldenjumper.wordpress.com/tag/ta-lib/
 
-   graphiviz which is required to plot the XGBoost tree diagram, can be installed with the following command: 
+   graphiviz which is required to plot the XGBoost tree diagram, can be installed with the following command: <br />
    Windows: <br />
    ```conda install python-graphviz```<br />
    Mac/Linux: <br />
