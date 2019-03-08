@@ -1,6 +1,6 @@
 [//]: # (Image References)
 
-[image1]: https://github.com/jiewwantan/StarTrader/blob/master/training_episodes.gif "Training iterations"
+[image1]: https://github.com/jiewwantan/StarTrader/blob/master/training_iteration_9.gif "Training iterations"
 [image2]: https://github.com/jiewwantan/StarTrader/blob/master/test_iteration_1.gif "Testing trained model with one iteration"
 # **StarTrader:** <br />Intelligent Trading Agent Development<br /> with Deep Reinforcement Learning
 
@@ -12,8 +12,7 @@ Two Gym environments are created to serve the purpose, one for training (StarTra
 
 A portfolio of five stocks (out of 27 Dow Jones Industrial Average stocks) are selected based on non-correlation factor. StarTrader will trade these five non-correlated stocks by learning to maximize total asset (portfolio value + current account balance) as its goal. During the trading process, StarTrader-v0 will also optimize the portfolio by deciding how many stock units to trade for each of the five stocks.
 
-### Training agent on 11 iterations
-Note: Although the training shown here uses data stretches till recent time, FEB 2019, the actual training where the model was tested (result shown below) stretches only until 2017, which means the model was tested on unseen data. <br />
+### Training agent on 9 iterations
 ![Training iterations][image1]
 
 ### Testing agent on one iteration 
