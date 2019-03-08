@@ -18,7 +18,7 @@ Note: Although the training shown here uses data stretches till recent time, FEB
 
 ### Testing agent on one iteration 
 No learning or model refinement, purely on testing the trained model. 
-Trading agent survived the major market correction in 2018 with 1.16 Sharpe ratio. <br />
+Trading agent survived the major market correction in 2018 with 1.13 Sharpe ratio. <br />
 
 ![Testing trained model with one iteration][image2]
 
