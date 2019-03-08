@@ -1,7 +1,7 @@
 [//]: # (Image References)
 
 [image1]: https://github.com/jiewwantan/StarTrader/blob/master/training_episodes.gif "Training iterations"
-[image2]: https://github.com/jiewwantan/StarTrader/blob/master/test_first_iteration.gif "Testing trained model with one iteration"
+[image2]: https://github.com/jiewwantan/StarTrader/blob/master/test_iteration_1.gif "Testing trained model with one iteration"
 # **StarTrader:** <br />Intelligent Trading Agent Development<br /> with Deep Reinforcement Learning
 
 ### Introduction
