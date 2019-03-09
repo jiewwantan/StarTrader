@@ -1,3 +1,73 @@
+[//]: # (Image References)
+
+[image1]: https://github.com/jiewwantan/StarTrader/blob/master/train_iterations_9.gif "Training iterations"
+[image2]: https://github.com/jiewwantan/StarTrader/blob/master/test_iteration_1.gif "Testing trained model with one iteration"
+[image3]: https://github.com/jiewwantan/StarTrader/blob/master/test_result/portfolios_returns.png "Trading strategy performance returns comparison"
+[image4]: https://github.com/jiewwantan/StarTrader/blob/master/test_result/portfolios_risk.png "Trading strategy performance risk comparison"
+
+# **StarTrader:** <br />Intelligent Trading Agent Development<br /> with Deep Reinforcement Learning
+
+### Introduction
+
+This project aims to create a trading agent in an [OpenAI Gym](https://gym.openai.com/) environment and trained by deep reinforcement learning algorithms.
+Two Gym environments are created to serve the purpose, one for training (StarTrader-v0), another testing
+(StarTraderTest-v0). Both versions of StarTrader will utilize Gym's baseline implmentation of Deep deterministic policy gradient (DDPG). 
+
+A portfolio of five stocks (out of 27 Dow Jones Industrial Average stocks) are selected based on non-correlation factor. StarTrader will trade these five non-correlated stocks by learning to maximize total asset (portfolio value + current account balance) as its goal. During the trading process, StarTrader-v0 will also optimize the portfolio by deciding how many stock units to trade for each of the five stocks.
+
+Based on modern portfolio theory, the portfolio optimization algorithm has chosen the following five stocks to trade: 
+
+1. American Express
+2. Wal Mart
+3. UnitedHealth Group
+4. Apple
+5. Verizon Communications
+		
+The preprocessing function creates technical data derived from each of the stock’s OHLCV data. On average there are roughly 6-8 time series data derived for each stock. 
+
+Apart from stock data, context data is also used to aid learning: 
+
+1. S&P 500 index
+2. Dow Jones Industrial Average index
+3. NASDAQ Composite index
+4. Russell 2000 index 
+5. SPDR S&P 500 ETF
+6. Invesco QQQ Trust
+7. CBOE Volatility Index
+8. SPDR Gold Shares 
+9. Treasury Yield 30 Years
+10. CBOE Interest Rate 10 Year T Note 
+11. iShares 1-3 Year Treasury Bond ETF
+12. iShares Short Treasury Bond ETF
+
+Simialrly, technical data derived from the above context data’s OHLCV data are being created. All data preprocessing is handled by two modules:
+1. data_preprocessing.py
+2. feature_select.py. 
+
+The preprocessed data are then being fed directly to StarTrader’s trading environment: class StarTradingEnv. 
+
+The feature selection module (feature_select.py) select about 6-8 features out of 41 OHLCV and its technical data, In total, there are 121 (may varies on different machine as the algorithm is not seeded) and about 36 stock feature data and the rest are context feature data. 
+
+When trading is executed, 121 features along with total asset and unrealized profit and loss will form a complete state space for the agent to trade and learn. The state space is designed to allow the agent to get a sense of the instantaneous environment in addition to how its interactions with the environment affects future state space. In another words, the trading agent bears the fruits and consequences of its own actions. 
+
+### Training agent on 9 iterations
+![Training iterations][image1]
+
+### Testing agent on one iteration 
+No learning or model refinement, purely on testing the trained model. 
+Trading agent survived the major market correction in 2018 with 1.13 Sharpe ratio. <br />
+
+![Testing trained model with one iteration][image2]
+
+### Compare agent's performance with other trading strategies
+DDPG is the best performer in terms of cumulative returns. However with a much less volatile ride, LSTM model has the highest Sharpe ratio (2.28) and Sortino ratio (3.62). 
+DDPG's reward system shall be modified to yield higher Sharpe and Sortino ratio. 
+For a fair comparison, LSTM model uses the same training data and similar backtester as DDPG.
+
+![Trading strategy performance returns comparison][image3]
+![Trading strategy performance risk comparison][image4]
+
+
 ## Prerequisites
 
 Python 3.6 or Anaconda with Python 3.6 environment
