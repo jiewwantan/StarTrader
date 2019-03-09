@@ -671,7 +671,7 @@ class UserDisplay:
         plt.legend()
         plt.xlabel('Years')
         plt.ylabel('Cumulative returns')
-        plt.title('Cumulative returns for portfolios with different risk management strategies')
+        plt.title('Cumulative returns for portfolios with different trading models')
         # Display and save the graph
         plt.savefig('./test_result/portfolios_returns.png')
         # Inform user graph is saved and the program is ending.
