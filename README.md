@@ -2,7 +2,7 @@
 
 [image1]: https://github.com/jiewwantan/StarTrader/blob/master/train_iterations_9.gif "Training iterations"
 [image2]: https://github.com/jiewwantan/StarTrader/blob/master/test_iteration_1.gif "Testing trained model with one iteration"
-[image3]: https://github.com/jiewwantan/StarTrader/blob/master/test_result/portfolios_returns.png "Trading strategy performance returns comparison"
+[image3]: https://github.com/jiewwantan/StarTrader/blob/master/test_result/portfolios_return.png "Trading strategy performance returns comparison"
 [image4]: https://github.com/jiewwantan/StarTrader/blob/master/test_result/portfolios_risk.png "Trading strategy performance risk comparison"
 
 # **StarTrader:** <br />Intelligent Trading Agent Development<br /> with Deep Reinforcement Learning
