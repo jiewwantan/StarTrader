@@ -22,7 +22,7 @@ END_TEST = datetime(2019, 2, 22)
 
 STARTING_ACC_BALANCE = 100000
 NUMBER_NON_CORR_STOCKS = 5
-# Number of times of no-improvement before training is stop.
+# Number of times of no-improvement before training stops.
 PATIENCE = 25
 
 # Pools of stocks to trade
