@@ -2,7 +2,8 @@
 
 [image1]: https://github.com/jiewwantan/StarTrader/blob/master/train_iterations_9.gif "Training iterations"
 [image2]: https://github.com/jiewwantan/StarTrader/blob/master/test_iteration_1.gif "Testing trained model with one iteration"
-[image3]: https://github.com/jiewwantan/StarTrader/blob/master/test_result/portfolios_returns.png "Trading strategy performance comparison"
+[image3]: https://github.com/jiewwantan/StarTrader/blob/master/test_result/portfolios_returns.png "Trading strategy performance returns comparison"
+[image4]: https://github.com/jiewwantan/StarTrader/blob/master/test_result/portfolios_risk.png "Trading strategy performance risk comparison"
 
 # **StarTrader:** <br />Intelligent Trading Agent Development<br /> with Deep Reinforcement Learning
 
@@ -24,10 +25,12 @@ Trading agent survived the major market correction in 2018 with 1.13 Sharpe rati
 ![Testing trained model with one iteration][image2]
 
 ### Compare agent's performance with other trading strategies
-DDPG is the best performer in terms of cumulative returns. However with a much less volatile ride, LSTM model has the highest Sharpe ratio (2.28) and Sortino ration (3.62). 
+DDPG is the best performer in terms of cumulative returns. However with a much less volatile ride, LSTM model has the highest Sharpe ratio (2.28) and Sortino ratio (3.62). 
 DDPG's reward system shall be modified to yield higher Sharpe and Sortino ratio. 
 
-![Trading strategy performance comparison][image3]
+![Trading strategy performance returns comparison][image3]
+![Trading strategy performance risk comparison][image4]
+
 
 ## Prerequisites
 
@@ -139,8 +142,9 @@ Linux Ubuntu 16.04 & Windows 10 Pro
       
       If you have trained a better model, replace ```DDPG_trained_model_8``` with your new model. 
       
-      After training and testing agent successfully, pick the best DDPG trading book saved in ./test_result/trading_book_test_1.csv or modify filename in compare.py. <br />
-      Compare agent performance with benchmark and other trading strategies:<br />
+      After training and testing the agent successfully, pick the best DDPG trading book and saved as ./test_result/trading_book_test_1.csv or modify filename in compare.py. <br />
+      Compare agent performance with benchmark index and other trading strategies:<br />
+      
       ```python compare.py```
 
 ## Special intructions: 
