@@ -1,37 +1,3 @@
-[//]: # (Image References)
-
-[image1]: https://github.com/jiewwantan/StarTrader/blob/master/train_iterations_9.gif "Training iterations"
-[image2]: https://github.com/jiewwantan/StarTrader/blob/master/test_iteration_1.gif "Testing trained model with one iteration"
-[image3]: https://github.com/jiewwantan/StarTrader/blob/master/test_result/portfolios_returns.png "Trading strategy performance returns comparison"
-[image4]: https://github.com/jiewwantan/StarTrader/blob/master/test_result/portfolios_risk.png "Trading strategy performance risk comparison"
-
-# **StarTrader:** <br />Intelligent Trading Agent Development<br /> with Deep Reinforcement Learning
-
-### Introduction
-
-This project aims to create a trading agent in an [OpenAI Gym](https://gym.openai.com/) environment and trained by deep reinforcement learning algorithms.
-Two Gym environments are created to serve the purpose, one for training (StarTrader-v0), another testing
-(StarTraderTest-v0). Both versions of StarTrader will utilize Gym's baseline implmentation of Deep deterministic policy gradient (DDPG). 
-
-A portfolio of five stocks (out of 27 Dow Jones Industrial Average stocks) are selected based on non-correlation factor. StarTrader will trade these five non-correlated stocks by learning to maximize total asset (portfolio value + current account balance) as its goal. During the trading process, StarTrader-v0 will also optimize the portfolio by deciding how many stock units to trade for each of the five stocks.
-
-### Training agent on 9 iterations
-![Training iterations][image1]
-
-### Testing agent on one iteration 
-No learning or model refinement, purely on testing the trained model. 
-Trading agent survived the major market correction in 2018 with 1.13 Sharpe ratio. <br />
-
-![Testing trained model with one iteration][image2]
-
-### Compare agent's performance with other trading strategies
-DDPG is the best performer in terms of cumulative returns. However with a much less volatile ride, LSTM model has the highest Sharpe ratio (2.28) and Sortino ratio (3.62). 
-DDPG's reward system shall be modified to yield higher Sharpe and Sortino ratio. 
-
-![Trading strategy performance returns comparison][image3]
-![Trading strategy performance risk comparison][image4]
-
-
 ## Prerequisites
 
 Python 3.6 or Anaconda with Python 3.6 environment
