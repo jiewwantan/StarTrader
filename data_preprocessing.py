@@ -628,7 +628,7 @@ class UserDisplay:
         plt.savefig('./test_result/price_prediction_{}.png'.format(nn))
         # Inform user graph is saved and the program is ending.
         print(
-            "Plot saved in ./test_result/predicplt.subplots_adjust(hspace=0.5)tion_{}.png. When done viewing, please close this plot for next plot. Thank You!".format(
+            "Plot saved in ./test_result/prediction_{}.png. When done viewing, please close this plot for next plot. Thank You!".format(
                 nn))
         plt.show()
 
@@ -695,7 +695,7 @@ class UserDisplay:
             col, row = MathCalc.colrow(i)
             ret = returns[d].dropna()
             # plot line graph
-            ax[row, col].hist(ret, bins=30, color='darkgreen')
+            ax[row, col].hist(ret, bins=50, color='darkgreen')
             ax[row, col].axvline(ret.mean(), color='red',
                                  linestyle='-.', linewidth=2.5, label='Mean')
             ax[row, col].axvline(np.median(ret), color='#f1f442',
