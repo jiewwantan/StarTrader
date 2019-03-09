@@ -236,14 +236,6 @@ class Data_ScaleSplit:
         self.scale_data()
         self.split_data(train_portion)
 
-    def load_data(self):
-        self.stock_raw_full = pd.read_csv('stock_raw_full.csv', index_col='Date', parse_dates=True,
-                                          infer_datetime_format=True)
-        self.original_stock_context_fs_full = pd.read_csv('original_stock_context_fs.csv', index_col='Date',
-                                                          parse_dates=True, infer_datetime_format=True)
-        self.stock_context_fs_full = pd.read_csv('stock_context_fs_full.csv', index_col='Date', parse_dates=True,
-                                                 infer_datetime_format=True)
-
     def generate_labels(self):
         self.Y = self.stock_price.shift(-1)
         self.Y.columns = [c + '_Y' for c in self.Y.columns]
