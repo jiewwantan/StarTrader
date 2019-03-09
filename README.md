@@ -2,6 +2,8 @@
 
 [image1]: https://github.com/jiewwantan/StarTrader/blob/master/train_iterations_9.gif "Training iterations"
 [image2]: https://github.com/jiewwantan/StarTrader/blob/master/test_iteration_1.gif "Testing trained model with one iteration"
+[image3]: https://github.com/jiewwantan/StarTrader/blob/master/test_result/portfolios_returns.png "Trading strategy performance comparison"
+
 # **StarTrader:** <br />Intelligent Trading Agent Development<br /> with Deep Reinforcement Learning
 
 ### Introduction
@@ -20,6 +22,12 @@ No learning or model refinement, purely on testing the trained model.
 Trading agent survived the major market correction in 2018 with 1.13 Sharpe ratio. <br />
 
 ![Testing trained model with one iteration][image2]
+
+### Compare agent's performance with other trading strategies
+DDPG is the best performer in terms of cumulative returns. However with a much less volatile ride, LSTM model has the highest Sharpe ratio (2.28) and Sortino ration (3.62). 
+DDPG's reward system shall be modified to yield higher Sharpe and Sortino ratio. 
+
+![Trading strategy performance comparison][image3]
 
 ## Prerequisites
 
@@ -130,6 +138,10 @@ Linux Ubuntu 16.04 & Windows 10 Pro
       ```python -m run --alg=ddpg --env=StarTraderTest-v0 --network=mlp --num_timesteps=2e3 --load_path='./model/DDPG_trained_model_8```
       
       If you have trained a better model, replace ```DDPG_trained_model_8``` with your new model. 
+      
+      After training and testing agent successfully, pick the best DDPG trading book saved in ./test_result/trading_book_test_1.csv or modify filename in compare.py. <br />
+      Compare agent performance with benchmark and other trading strategies:<br />
+      ```python compare.py```
 
 ## Special intructions: 
 1. Depends on machine configuration, the following intallation maybe necessary: 
