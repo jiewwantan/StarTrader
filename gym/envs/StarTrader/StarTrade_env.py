@@ -19,6 +19,7 @@ STARTING_ACC_BALANCE = 100000
 NUMBER_NON_CORR_STOCKS = 5
 MAX_TRADE = 10
 TRAIN_RATIO = 0.8
+PRICE_IMPACT = 0.1
 
 # Pools of stocks to trade
 DJI = ['MMM', 'AXP', 'AAPL', 'BA', 'CAT', 'CVX', 'CSCO', 'KO', 'DIS', 'XOM', 'GE', 'GS', 'HD', 'IBM', 'INTC', 'JNJ',
@@ -53,17 +54,12 @@ context_df = dataset.get_feature_dataframe (CONTEXT_DATA)
 # With context data
 input_states = pd.concat([context_df, feature_df], axis=1)
 input_states.to_csv('./data/ddpg_input_states.csv')
-#input_states_test = input_states.loc[START_TEST:END_TEST]
-#input_states_train = input_states.loc[START_TRAIN:END_TRAIN]
-#input_states = input_states_train
 # Without context data
 #input_states = feature_df
 feature_length = len(input_states.columns)
 data_length = len(input_states)
-#train_input_states = input_states.iloc[:int(len(input_states) * TRAIN_RATIO)]
-#test_input_states = input_states.iloc[int(len(input_states) * TRAIN_RATIO):]
-#input_states = train_input_states
 stock_price = dataset.components_df_o[non_corr_stocks]
+stock_volume = dataset.components_df_v[non_corr_stocks]
 stock_price.to_csv('./data/ddpg_stock_price.csv')
 
 print("Feature length", feature_length)
@@ -86,8 +82,7 @@ class StarTradingEnv(gym.Env):
     def __init__(self, day = START_TRAIN):
 
         """
-        Initializing the trading environment, many trading parameters starting values are defined here
-
+        Initializing the trading environment, trading parameters starting values are defined.
         """
         self.iteration = 0
         self.day = day
@@ -137,14 +132,23 @@ class StarTradingEnv(gym.Env):
         self.reset()
 
     def _sell(self, idx, action):
+        """
+        Perform and record sell transactions. Commissions and slippage are taken into account.
+        """
 
+        # Only need to sell the unit recommended by the trading agent, not necessarily all stock unit.
+        num_share = min(abs(int(action)) , self.state[idx + self.full_feature_length])
+        commission = dp.Trading.commission(num_share, stock_price.loc[self.day][idx])
+        # Calculate slipped price. Though, at max trading volume of 10 shares, there's hardly any slippage
+        transacted_price = dp.Trading.slippage_price(stock_price.loc[self.day][idx], -num_share, stock_volume.loc[self.day][idx])
+        
         # If there is existing stock holding
         if self.state[idx + self.full_feature_length] > 0:
-            # Only need to sell the unit recommended by the trading agent, not necessarily all stock unit.
+
             # Update account balance after transaction
-            self.state[0] += stock_price.loc[self.day][idx] * min(abs(int(action)), self.state[idx + self.full_feature_length])
+            self.state[0] += (transacted_price * num_share) - commission
             # Update stock holding
-            self.state[idx + self.full_feature_length] -= min(abs(int(action)), self.state[idx + self.full_feature_length])
+            self.state[idx + self.full_feature_length] -= num_share
             # Reset transacted buy price record to 0.0 if there is no more stock holding
             if self.state[idx + self.full_feature_length] == 0.0:
                 self.buy_price[idx] = 0.0
@@ -152,13 +156,24 @@ class StarTradingEnv(gym.Env):
             pass
 
     def _buy(self, idx, action):
+        """
+        Perform and record buy transactions. Commissions and slippage are taken into account.
+        """
 
         # Calculate the maximum possible number of stock unit the current cash can buy
         available_unit = self.state[0] // stock_price.loc[self.day][idx]
-
+        num_share = min(available_unit, int(action))
         # Deduct the traded amount from account balance. If available balance is not enough to purchase stock unit
         # recommended by trading agent's action, just use what is left.
-        self.state[0] -= stock_price.loc[self.day][idx] * min(available_unit, int(action))
+        commission = dp.Trading.commission(num_share, stock_price.loc[self.day][idx])
+        # Calculate slipped price. Though, at max trading volume of 10 shares, there's hardly any slippage
+        transacted_price = dp.Trading.slippage_price(stock_price.loc[self.day][idx], num_share,
+                                                      stock_volume.loc[self.day][idx])
+
+        # Revise number of share to trade if account balance does not have enough
+        if (self.state[0] - commission) < transacted_price * num_share:
+            num_share = (self.state[0] - commission) // transacted_price
+        self.state[0] -= ( transacted_price * num_share ) + commission
 
 
         # If there are existing stock holding already, calculate the average buy price
@@ -167,16 +182,19 @@ class StarTradingEnv(gym.Env):
             previous_buy_price = self.buy_price[idx]
             additional_unit = min(available_unit, int(action))
             new_holding = existing_unit + additional_unit
-            self.buy_price[idx] = ((existing_unit * previous_buy_price ) + (stock_price.loc[self.day][idx] * additional_unit))/ new_holding
+            self.buy_price[idx] = ((existing_unit * previous_buy_price ) + (transacted_price * additional_unit))/ new_holding
         # if there is no existing stock holding, simply record the current buy price
         elif self.state[idx + self.full_feature_length] == 0.0:
-            self.buy_price[idx] = stock_price.loc[self.day][idx]
+            self.buy_price[idx] = transacted_price
 
         # Update stock holding at its index
-        self.state[idx + self.full_feature_length] += min(available_unit, int(action))
+        self.state[idx + self.full_feature_length] += num_share
 
 
     def step(self, actions):
+        """
+        The step of an episode. Perform all activities of an episode.
+        """
 
         # Episode ends when timestep reaches the last day in feature data
         self.done = self.day >= END_TRAIN
@@ -292,8 +310,11 @@ class StarTradingEnv(gym.Env):
             # Get the agent to consider gain-to-pain or lake ratio and be responsible for it if it has traded long enough
             if len(self.total_asset) > 9:
                 returns = dp.MathCalc.calc_return(pd.Series(self.total_asset))
-                self.reward = total_asset_ending - total_asset_starting + (100*dp.MathCalc.calc_gain_to_pain(returns))\
+
+                self.reward = total_asset_ending - total_asset_starting \
+                              + (100*dp.MathCalc.calc_gain_to_pain(returns))\
                               - (500 * dp.MathCalc.calc_lake_ratio(pd.Series(returns).add(1).cumprod().fillna(1)))
+                              #+ (50 * dp.MathCalc.sharpe_ratio(pd.Series(returns)))
 
             # If agent has not traded long enough, it only has to bear total asset difference  at the end of the day
             else:
@@ -303,7 +324,7 @@ class StarTradingEnv(gym.Env):
 
     def reset(self):
         """
-        Reset the environment once an episode end
+        Reset the environment once an episode end.
 
         """
         self.acc_balance = [STARTING_ACC_BALANCE]
@@ -333,8 +354,15 @@ class StarTradingEnv(gym.Env):
         return self.state
     
     def render(self, mode='human'):
+        """
+        Render the environment with current state.
+
+        """
         return self.state
 
     def _seed(self, seed=None):
+        """
+        Seed the iteration.
+        """
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
