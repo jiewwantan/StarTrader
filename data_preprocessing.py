@@ -61,7 +61,7 @@ MAR = 0.05
 
 class DataRetrieval:
     """
-    This class prepares data by downloading historical data from pre-saved data.
+    This class prepares data by loading historical data from pre-saved data.
     """
 
     def __init__(self):
@@ -70,7 +70,7 @@ class DataRetrieval:
 
     def _get_daily_data(self, symbol):
         """
-        This class prepares data by downloading historical data from Yahoo Finance,
+        Load pre-saved historical data stock by stock.
 
         """
         daily_price = pd.read_csv("{}{}{}".format('./data/', symbol, '.csv'), index_col='Date', parse_dates=True)
@@ -79,7 +79,7 @@ class DataRetrieval:
 
     def _dji_components_data(self):
         """
-        This function download all components data and assembles the required OHLCV data into respective data
+        This function retrieve all components data and assembles the required OHLCV data into respective data
         """
 
         for i in DJI + CONTEXT_DATA:
@@ -106,14 +106,24 @@ class DataRetrieval:
                 self.components_df_v[i] = daily_price["Volume"]
 
     def get_dailyprice_df(self):
+        """
+        Gets all stocks' close price and separates them into train and test set.
+        """
         self.dow_stocks_test = self.components_df_c.loc[START_TEST:END_TEST][DJI]
         self.dow_stocks_train = self.components_df_c.loc[START_TRAIN:END_TRAIN][DJI]
 
     def get_all(self):
+        """
+        Response to external request to get all stock price in train and test set.
+        """
+
         self.get_dailyprice_df()
         return self.dow_stocks_train, self.dow_stocks_test
 
     def technical_indicators_df(self, daily_data):
+        """
+        Assemble a dataframe of technical indicator series for a single stock
+        """
         o = daily_data['Open'].values
         c = daily_data['Close'].values
         h = daily_data['High'].values
@@ -155,6 +165,10 @@ class DataRetrieval:
         return (df['Returns'] > 0).astype(int)
 
     def preprocessing(self, symbol):
+        """
+        Preprocess all stock data into a big dataframe of features with the help of a feature selector , also creates label data
+
+        """
         print("\n")
         print("Preprocessing {} & its technical data".format(symbol))
         print("============================================")
@@ -195,6 +209,10 @@ class DataRetrieval:
         return self.X_fs
 
     def get_feature_dataframe(self, selected_stock):
+        """
+        Get the preprocessed dataframe and extract only the stocks in interest. Returns a smaller dataframe
+
+        """
         self.feature_df = pd.DataFrame()
         for s in selected_stock:
             if s == selected_stock[0]:
@@ -208,6 +226,9 @@ class DataRetrieval:
         return self.feature_df
 
     def get_adj_close(self, selected):
+        """
+        Get a 3D dataframe of Adjusted close price from Quandl.
+        """
         # get adjusted closing prices of 5 selected companies with Quandl
         quandl.ApiConfig.api_key = 'CxU5-dDyxppBFzVgGG6z'
         data = quandl.get_table('WIKI/PRICES', ticker=selected,
@@ -224,7 +245,7 @@ class MathCalc:
     @staticmethod
     def calc_return(period):
         """
-        This function compute the return of a series
+        This function computes the return of a series
         """
         period_return = period / period.shift(1) - 1
         return period_return[1:len(period_return)]
@@ -240,9 +261,7 @@ class MathCalc:
     @staticmethod
     def positive_pct(series):
         """
-        This function calculate the probably of positive values from a series of values.
-        :param series:
-        :return:
+        This function calculates the probably of positive values from a series of values.
         """
         return (float(len(series[series > 0])) / float(len(series)))*100
 
@@ -250,7 +269,6 @@ class MathCalc:
     def calc_yearly_return(series):
         """
         This function computes the yearly return
-
         """
         return MathCalc.calc_return(series.resample('AS').last())
 
@@ -268,7 +286,6 @@ class MathCalc:
 
         """
         This function computes lake ratio
-
         """
         water = 0
         earth = 0
@@ -288,8 +305,7 @@ class MathCalc:
     @staticmethod
     def calc_gain_to_pain(daily_series):
         """
-        This function computes the gain to pain ratio given a series of profits and losees
-
+        This function computes the gain to pain ratio given a series of cummulative returns
         """
 
         try:
@@ -305,12 +321,17 @@ class MathCalc:
 
     @staticmethod
     def sharpe_ratio(returns):
+        """
+        Calculates Sharpe ratio from a series of returns.
+        """
         return ((returns.mean() - RISK_FREE_RATE) / returns.std()) * np.sqrt(252)
 
     @staticmethod
     def downside_deviation(returns):
-        # This method returns a lower partial moment of the returns
-        # Create an array he same length as returns containing the minimum return threshold
+        """
+        This method returns a lower partial moment of the returns. Create an array he same length as returns containing the minimum return threshold
+        """
+        #
 
         target = 0
         df = pd.DataFrame(data=returns, columns=["Returns"], index=returns.index)
@@ -322,6 +343,9 @@ class MathCalc:
 
     @staticmethod
     def sortino_ratio(returns):
+        """
+        Calculates Sortino ratio from a series of returns.
+        """
         return ((returns.mean() - RISK_FREE_RATE) / MathCalc.downside_deviation(returns))* np.sqrt(252)
 
     @staticmethod
@@ -403,7 +427,8 @@ class Trading:
         self.daily_v = dow_stocks_volume
         self.remaining_stocks()
 
-    def slippage_price(self, order, price, stock_quantity, day_volume):
+    @staticmethod
+    def slippage_price(price, stock_quantity, day_volume):
         """
         This function performs slippage price calculation using Zipline's volume share model
         https://www.zipline.io/_modules/zipline/finance/slippage.html
@@ -412,30 +437,39 @@ class Trading:
         volumeShare = stock_quantity / float(day_volume)
         impactPct = volumeShare ** 2 * PRICE_IMPACT
 
-        if order > 0:
+        if stock_quantity > 0:
             slipped_price = price * (1 + impactPct)
         else:
             slipped_price = price * (1 - impactPct)
 
         return slipped_price
 
-    def commission(self, num_share, share_value):
+    @staticmethod
+    def commission(num_share, share_value):
         """
         This function computes commission fee of every trade
         https://www.interactivebrokers.com/en/index.php?f=1590&p=stocks1
         """
-
+        trade_value = num_share * share_value
+        max_comm_fee = 0.01 * trade_value
         comm_fee = 0.005 * num_share
-        max_comm_fee = 0.005 * share_value
 
-        if num_share < 1.0:
-            comm_fee = 1.0
-        elif comm_fee > max_comm_fee:
+        if max_comm_fee < comm_fee:
             comm_fee = max_comm_fee
+        elif comm_fee <= max_comm_fee and comm_fee > 1.0:
+            pass
+        elif comm_fee < 1.0 and num_share > 0:
+            comm_fee = 1.0
+        elif num_share == 0:
+            comm_fee = 0.0
 
         return comm_fee
 
     def find_efficient_frontier(self, data, selected):
+        """
+        Find efficient frontier of a portfolio of stocks.
+        Returns the stock weights for Sharpe ratio and minimum variance optimized portfolios.
+        """
 
         # reorganise data pulled by setting date as index with
         # columns of tickers and their corresponding adjusted prices
@@ -505,15 +539,14 @@ class Trading:
 
     def remaining_stocks(self):
         """
-        This function finds out the remaining Dow component stocks after 10 randomly chosen stocks are taken.
-        :return:
+        This function finds out the remaining Dow component stocks after the selected stocks are taken.
         """
         dow_remaining = self._dow_stocks_test.drop(RANDOM_STOCK, axis=1)
         self.dow_remaining = [i for i in dow_remaining.columns]
 
     def construct_book(self, dow_stocks_values, buyhold):
         """
-        This function construct the trading book for stock
+        This function construct the trading book for the buy and hold trading strategy
         """
         portfolio = pd.DataFrame(index=dow_stocks_values.index,
                                  columns=["Total asset", "ProfitLoss", "Returns", "CumReturns"])
@@ -568,8 +601,9 @@ class Trading:
 
     def find_non_correlate_stocks(self, num_non_corr_stocks):
         """
-        This function performs trade with a portfolio starting with 10 randomly chosen stocks, creating new portfolios
-        each 5 more additional stock with the stocks with less correlation with the 10 stock portfolio chosen first.
+        This function performs trade with a portfolio starting with the number of stocks specified and
+        find the required number of most uncorrelated stocks.
+        Only the train set data is used to perform this task to avoid look ahead bias.
         """
         add_stocks = (min(num_non_corr_stocks, len(DJI))) - 1
         # Get the returns of the long only returns of all Dow component stocks during the pre-trading period.
@@ -597,13 +631,13 @@ class Trading:
 
 class UserDisplay:
     """
-    The class to display plot(s) to users
+    The class displays plot(s) to users.
     """
 
     def plot_prediction(self, original, trained, train_len, nn):
 
         """
-        Function to plot all portfolio cumulative returns
+        Function to plot all stocks' actual price and price predicted by LSTM model.
         """
         # Set a palette so that all 14 lines can be better differentiated
         color_palette = ['#e6194b', '#3cb44b', '#4363d8']
@@ -633,6 +667,9 @@ class UserDisplay:
         plt.show()
 
     def plot_efficient_frontier(self, risk_return_dict, sharpe_portfolio, min_variance_portfolio):
+        """
+        Plot the efficient frontier of a portfolio of stocks.
+        """
 
         # plot frontier, max sharpe & min Volatility values with a scatterplot
         plt.style.use('seaborn-dark')
@@ -655,7 +692,7 @@ class UserDisplay:
 
     def plot_portfolio_return(self, cum_returns):
         """
-        Function to plot all portfolio cumulative returns
+        Function to plot all portfolio cumulative returns.
         """
         # Set a palette so that all 14 lines can be better differentiated
         color_palette = ['#36C4FE', '#FF66F9', '#FF7E66', '#DE0049', '0038E7',

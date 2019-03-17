@@ -22,8 +22,8 @@ END_TEST = datetime(2019, 2, 22)
 
 STARTING_ACC_BALANCE = 100000
 NUMBER_NON_CORR_STOCKS = 5
-# Number of times of no-improvement before training stops.
-PATIENCE = 25
+# Number of times of no-improvement before training is stop.
+PATIENCE = 30
 
 # Pools of stocks to trade
 DJI = ['MMM', 'AXP', 'AAPL', 'BA', 'CAT', 'CVX', 'CSCO', 'KO', 'DIS', 'XOM', 'GE', 'GS', 'HD', 'IBM', 'INTC', 'JNJ',
@@ -39,46 +39,19 @@ CONTEXT_DATA = ['^GSPC', '^DJI', '^IXIC', '^RUT', 'SPY', 'QQQ', '^VIX', 'GLD', '
 
 # --------------------------------- CLASSES ------------------------------------
 class Trading:
-    def __init__(self, recovered_data_lstm, portfolio_stock_price, test_set, non_corr_stocks):
+    def __init__(self, recovered_data_lstm, portfolio_stock_price, portfolio_stock_volume, test_set, non_corr_stocks):
         self.test_set = test_set
         self.ncs = non_corr_stocks
         self.stock_price = portfolio_stock_price
+        self.stock_volume = portfolio_stock_volume
         self.generate_signals(recovered_data_lstm)
 
-    def slippage_price(self, order, price, stock_quantity, day_volume):
-        """
-        This function performs slippage price calculation using Zipline's volume share model
-        https://www.zipline.io/_modules/zipline/finance/slippage.html
-        """
-
-        volumeShare = stock_quantity / float(day_volume)
-        impactPct = volumeShare ** 2 * PRICE_IMPACT
-
-        if order > 0:
-            slipped_price = price * (1 + impactPct)
-        else:
-            slipped_price = price * (1 - impactPct)
-
-        # print order, " price: ", price, "slipped price: ", slipped_price
-        return slipped_price
-
-    def commission(self, num_share, share_value):
-        """
-        This function computes commission fee of every trade
-        https://www.interactivebrokers.com/en/index.php?f=1590&p=stocks1
-        """
-
-        comm_fee = 0.005 * num_share
-        max_comm_fee = 0.005 * share_value
-
-        if num_share < 1.0:
-            comm_fee = 1.0
-        elif comm_fee > max_comm_fee:
-            comm_fee = max_comm_fee
-
-        return comm_fee
-
     def generate_signals(self, predicted_tomorrow_close):
+        """
+        Generate trade signla from the prediction of the LSTM model
+        :param predicted_tomorrow_close:
+        :return:
+        """
 
         predicted_tomorrow_close.columns = self.stock_price.columns
         predicted_next_day_returns = (predicted_tomorrow_close / predicted_tomorrow_close.shift(1) - 1).dropna()
@@ -109,28 +82,53 @@ class Trading:
         self.signals = signals
 
     def _sell(self, stock, sig, day):
+        """
+        Perform and record sell transactions.
+        """
+
+        # Get the index of the stock
         idx = self.ncs.index(stock)
+
+        # Only need to sell the unit recommended by the trading agent, not necessarily all stock unit.
+        num_share = min(abs(int(sig)), self.state[idx + 1])
+        commission = dp.Trading.commission(num_share, self.stock_price.loc[day][stock])
+        # Calculate slipped price. Though, at max trading volume of 10 shares, there's hardly any slippage
+        transacted_price = dp.Trading.slippage_price(self.stock_price.loc[day][stock], -num_share,
+                                                     self.stock_volume.loc[day][stock])
+
         # If there is existing stock holding
         if self.state[idx + 1] > 0:
             # Only need to sell the unit recommended by the trading agent, not necessarily all stock unit.
             # Update account balance after transaction
-            self.state[0] += self.stock_price.loc[day][stock] * min(abs(int(sig)), self.state[idx + 1])
+            self.state[0] += (transacted_price * num_share) - commission
             # Update stock holding
-            self.state[idx + 1] -= min(abs(int(sig)), self.state[idx + 1])
+            self.state[idx + 1] -= num_share
             # Reset transacted buy price record to 0.0 if there is no more stock holding
             if self.state[idx + 1] == 0.0:
                 self.buy_price[idx] = 0.0
+
         else:
             pass
 
     def _buy(self, stock, sig, day):
+        """
+        Perform and record buy transactions.
+        """
+
         idx = self.ncs.index(stock)
         # Calculate the maximum possible number of stock unit the current cash can buy
         available_unit = self.state[0] // self.stock_price.loc[day][stock]
-
+        num_share = min(available_unit, int(sig))
         # Deduct the traded amount from account balance. If available balance is not enough to purchase stock unit
         # recommended by trading agent's action, just use what is left.
-        self.state[0] -= self.stock_price.loc[day][stock] * min(available_unit, int(sig))
+        commission = dp.Trading.commission(num_share, self.stock_price.loc[day][stock])
+        # Calculate slipped price. Though, at max trading volume of 10 shares, there's hardly any slippage
+        transacted_price = dp.Trading.slippage_price(self.stock_price.loc[day][stock], num_share,
+                                                     self.stock_volume.loc[day][stock])
+        # Revise number of share to trade if account balance does not have enough
+        if (self.state[0] - commission) < transacted_price * num_share:
+            num_share = (self.state[0] - commission) // transacted_price
+        self.state[0] -= (transacted_price * num_share) + commission
 
         # If there are existing stock holding already, calculate the average buy price
         if self.state[idx + 2] > 0.0:
@@ -149,7 +147,7 @@ class Trading:
 
     def execute_trading(self, non_corr_stocks):
         """
-        This function performs long only trades.
+        This function performs long only trades for the LSTM model.
         """
 
         # The money in the trading account
@@ -226,7 +224,7 @@ class Trading:
 
 class Data_ScaleSplit:
     """
-    This class prepares data by downloading historical data from pre-saved data.
+    This class preprosses data for the LSTM model.
     """
 
     def __init__(self, X, selected_stocks_price, train_portion):
@@ -236,11 +234,19 @@ class Data_ScaleSplit:
         self.scale_data()
         self.split_data(train_portion)
 
+
     def generate_labels(self):
+        """
+        Generate label data for tomorrow's prediction.
+        """
         self.Y = self.stock_price.shift(-1)
         self.Y.columns = [c + '_Y' for c in self.Y.columns]
 
     def scale_data(self):
+        """
+        Scale the X and Y data with minimax scaller.
+        The scaling is done separately for the train and test set to avoid look ahead bias.
+        """
         self.XY = pd.concat([self.X, self.Y], axis=1).dropna()
         train_set = self.XY.loc[START_TRAIN:END_TRAIN]
         test_set = self.XY.loc[START_TEST:END_TEST]
@@ -257,6 +263,9 @@ class Data_ScaleSplit:
         # print ("Test set shape: ", test_set_matrix.shape)
 
     def split_data(self, train_portion):
+        """
+        Perform train test split with cut off date defined.
+        """
         df_values = self.XY.values
         # split into train and test sets
 
@@ -276,6 +285,10 @@ class Data_ScaleSplit:
         print("Test label data shape:", self.test_y.shape)
 
     def get_prediction(self, model_lstm):
+        """
+        Get the model prediction, inverse transform scaling to get back to original price and
+        reassemble the full XY dataframe.
+        """
         # Get the model to predict test_y
 
         predicted_y_lstm = model_lstm.predict(self.test_X, batch_size=None, verbose=0, steps=None)
@@ -299,17 +312,28 @@ class Data_ScaleSplit:
         return self.recovered_data_lstm
 
     def get_train_test_set(self):
+        """
+        Get the split X and y data.
+        """
         return self.train_X, self.train_y, self.test_X, self.test_y
 
     def get_all_data(self):
+        """
+        Get the full XY data and the original stock price.
+        """
         return self.XY, self.stock_price
 
 class Model:
     """
     This class contains all the functions required to build a LSTM or LSTM-CNN model
+    It also offer an option to load a pre-built model.
     """
     @staticmethod
     def train_model(model, train_X, train_y, model_type):
+        """
+        Try to load a pre-built model.
+        Otherwise fit a new mode with the training data. Once training is done, save the model.
+        """
         es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=PATIENCE)
         if model_type == "LSTM":
             batch_size = 4
@@ -356,6 +380,9 @@ class Model:
 
     @staticmethod
     def plot_training(history,nn):
+        """
+        Plot the historical training loss.
+        """
         # plot history
         plt.plot(history.history['loss'], label='train')
         plt.plot(history.history['val_loss'], label='test')
@@ -366,6 +393,9 @@ class Model:
 
     @staticmethod
     def build_rnn_model(train_X):
+        """
+        Build the RNN model architecture.
+        """
         # design network
         print("\n")
         print("RNN LSTM model architecture >")
@@ -491,8 +521,9 @@ def main():
     modelling = Model
     model_lstm = modelling.build_rnn_model(train_X)
     history_lstm, model_lstm = modelling.train_model(model_lstm, train_X, train_y, "LSTM")
+    print("RNN model loaded, now training the model again, training will stop after {} episodes no improvement")
     modelling.plot_training(history_lstm, "LSTM")
-
+    print("Training completed, loading prediction using the trained RNN model >")
     recovered_data_lstm = scale_split.get_prediction(model_lstm)
     plot.plot_prediction(dow_stocks[non_corr_stocks].loc[recovered_data_lstm.index], recovered_data_lstm[recovered_data_lstm.columns[-5:]] , len(train_X), "LSTM")
 
@@ -500,13 +531,13 @@ def main():
     original_portfolio_stock_price = dow_stocks[non_corr_stocks].loc[recovered_data_lstm.index]
     # Get the predicted stock price with the prediction length
     predicted_portfolio_stock_price = recovered_data_lstm[recovered_data_lstm.columns[-5:]]
-
+    print("Bactesting the RNN-LSTM model now")
     # Run backtest, the backtester is similar to those use by StarTrader too
-    backtest = Trading(predicted_portfolio_stock_price, original_portfolio_stock_price, dow_stocks_test[non_corr_stocks], non_corr_stocks)
+    backtest = Trading(predicted_portfolio_stock_price, original_portfolio_stock_price, dow_stock_volume[non_corr_stocks].loc[recovered_data_lstm.index],  dow_stocks_test[non_corr_stocks], non_corr_stocks)
     trading_book, kpi = backtest.execute_trading(non_corr_stocks)
     # Load backtest result for StarTrader using DDPG as learning algorithm
     ddpg_backtest = pd.read_csv('./test_result/trading_book_test_1.csv', index_col='Unnamed: 0', parse_dates=True)
-
+    print("Backtesting completed, plotting comparison of trading models")
     # Compare performance on all 4 trading type
     djia_daily = dataset._get_daily_data(CONTEXT_DATA[1]).loc[START_TEST:END_TEST]['Close']
     #print(djia_daily)
