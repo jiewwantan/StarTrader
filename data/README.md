@@ -2,6 +2,15 @@
 ## By Jiew Wan Tan
 ### 18 March 2019
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
+
+## Prerequisites
+
+Python 3.6 or Anaconda with Python 3.6 environment
+The code is written in a Linux machine and has been tested only on a Linux Ubuntu 16.04 system and Windows 10 Pro. 
+
 ## Files included
 
 1. /StarTrader/ folder - the environment files
@@ -20,16 +29,6 @@
 14. JiewWanTan_capstone_report_18Mar2018.pdf - Capstone Report 
 15. rnn_lstm_model_dev.ipynb - provides an option for user to train RNN-LSTM model
 16. readme.txt - this file
-
-
-## Prerequisites
-
-Python 3.6 or Anaconda with Python 3.6 environment
-Python packages: pandas, numpy, matplotlib, statsmodels, sklearn, tensorflow
-
-The code is written in a Linux machine and has been tested only on a Linux Ubuntu 16.04 system.
-Test run will be performed on Windows 10 Pro. 
-
 
 ## Installation instructions:
 
@@ -194,7 +193,19 @@ Data and code related to instructions, program execution, train and test results
 	import copy
 	from matplotlib.dates import (DateFormatter, WeekdayLocator, DayLocator, MONDAY)
 
+## License
+ 
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/jiewwantan/StarTrader/blob/master/LICENSE) file for details
 
+
+## Acknowledgments
+
+ - Guidance of my supervisor, Ritabrata Bhattacharyya
+ - Researchers and developers in [OpenAI Gym](https://gym.openai.com/)  
+ - Inspiration from researchers in Deepmind
+ - Udacity for producing excellent course content
+ - All the researchers and book authors that contributed to the knowledge base that produce this work.
+ 
 #### Author
 Jiew Wan Tan on 18th Mar 2019
 
