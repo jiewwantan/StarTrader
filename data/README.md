@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Prerequisites
 
-Python 3.6 or Anaconda with Python 3.6 environment
+Python 3.6 or Anaconda with Python 3.6 environment <br />
 The code is written in a Linux machine and has been tested only on a Linux Ubuntu 16.04 system and Windows 10 Pro. 
 
 ## Files included
@@ -98,11 +98,11 @@ The code is written in a Linux machine and has been tested only on a Linux Ubunt
    
 9. Replace ddpg.py from Gym's baselines installation with ddpg.py provided in this package:
 
-   /baselines/baselines/ddpg/ddpg.py
+	/baselines/baselines/ddpg/ddpg.py
 
 10.Replace ddpg_learner.py from Gym's baseline installation with ddpg_learner.py in this repository:
 
-   /baselines/baselines/ddpg/ddpg_learner.py
+	/baselines/baselines/ddpg/ddpg_learner.py
 
 11. Place feature_select.py and data_preprocessing.py in the same folder as run.py
 
