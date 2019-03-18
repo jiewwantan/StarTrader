@@ -2,9 +2,7 @@
 ## By Jiew Wan Tan
 ### 18 March 2019
 
-## Usage instructions
-
-Files included: 
+## Files included
 
 1. /StarTrader/ folder - the environment files
 2. /StarTraderTest/ folder - the environment files
