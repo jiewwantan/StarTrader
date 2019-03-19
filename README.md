@@ -178,7 +178,7 @@ Linux Ubuntu 16.04 & Windows 10 Pro
       
       If you have trained a better model, replace ```DDPG_trained_model_8``` with your new model. 
       
-      After training and testing the agent successfully, pick the best DDPG trading book and saved as ./test_result/trading_book_test_1.csv or modify filename in compare.py. <br />
+      After training and testing the agent successfully, pick the first DDPG trading book for the test run which is saved as ./test_result/trading_book_test_1.csv or modify filename in compare.py. <br />
       Compare agent performance with benchmark index and other trading strategies:<br />
       
       ```python compare.py```
