@@ -73,7 +73,7 @@ For a fair comparison, LSTM model uses the same training data and similar backte
 Python 3.6 or Anaconda with Python 3.6 environment
 Python packages: pandas, numpy, matplotlib, statsmodels, sklearn, tensorflow
 
-The code is written in a Windows machine and has been tested on three operating systems: 
+The code is written in a Linux machine and has been tested on two operating systems: 
 Linux Ubuntu 16.04 & Windows 10 Pro
 
 
