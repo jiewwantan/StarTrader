@@ -60,7 +60,7 @@ Trading agent survived the major market correction in 2018 with 1.13 Sharpe rati
 ![Testing trained model with one iteration][image2]
 
 ### Compare agent's performance with other trading strategies
-DDPG is the best performer in terms of cumulative returns. However with a much less volatile ride, LSTM model has the highest Sharpe ratio (1.88) and Sortino ratio (3.06). 
+DDPG is the best performer in terms of cumulative returns. However with a much less volatile ride, RNN-LSTM model has the highest Sharpe ratio (1.88) and Sortino ratio (3.06). Both RNN-LSTM and DRL-DDPG modelled trading strategies have trading costs: commission (based on Interactive Broker) and slippage (based on volume and DJIA volatility) incorporated since there are many transactions during the trading window. The other buy-and-hold strategies' trading costs are omitted since there is stocks are only transacted once. 
 DDPG's reward system shall be modified to yield higher Sharpe and Sortino ratio. 
 For a fair comparison, LSTM model uses the same training data and similar backtester as DDPG model.
 
