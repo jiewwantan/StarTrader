@@ -42,13 +42,13 @@ Apart from stock data, context data is also used to aid learning:
 
 Simialrly, technical data derived from the above context data’s OHLCV data are being created. All data preprocessing is handled by two modules:
 1. data_preprocessing.py
-2. feature_select.py. 
+2. feature_select.py 
 
 The preprocessed data are then being fed directly to StarTrader’s trading environment: class StarTradingEnv. 
 
 The feature selection module (feature_select.py) select about 6-8 features out of 41 OHLCV and its technical data, In total, there are 121 (may varies on different machine as the algorithm is not seeded) and about 36 stock feature data and the rest are context feature data. 
 
-When trading is executed, 121 features along with total asset, curremt asset holdings and unrealized profit and loss will form a complete state space for the agent to trade and learn. The state space is designed to allow the agent to get a sense of the instantaneous environment in addition to how its interactions with the environment affects future state space. In another words, the trading agent bears the fruits and consequences of its own actions. 
+When trading is executed, 121 features along with total asset, current asset holdings and unrealized profit and loss will form a complete state space for the agent to trade and learn. The state space is designed to allow the agent to get a sense of the instantaneous environment in addition to how its interactions with the environment affects future state space. In another words, the trading agent bears the fruits and consequences of its own actions. 
 
 ### Training agent on 9 iterations
 ![Training iterations][image1]
