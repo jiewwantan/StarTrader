@@ -40,7 +40,7 @@ Apart from stock data, context data is also used to aid learning:
 11. iShares 1-3 Year Treasury Bond ETF
 12. iShares Short Treasury Bond ETF
 
-Simialrly, technical data derived from the above context data’s OHLCV data are being created. All data preprocessing is handled by two modules:
+Similarly, technical data derived from the above context data’s OHLCV data are being created. All data preprocessing is handled by two modules:
 1. data_preprocessing.py
 2. feature_select.py 
 
