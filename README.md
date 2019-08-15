@@ -46,7 +46,7 @@ Similarly, technical data derived from the above context data’s OHLCV data are
 
 The preprocessed data are then being fed directly to StarTrader’s trading environment: class StarTradingEnv. 
 
-The feature selection module (feature_select.py) select about 6-8 features out of 41 OHLCV and its technical data, In total, there are 121 (may varies on different machine as the algorithm is not seeded) and about 36 stock feature data and the rest are context feature data. 
+The feature selection module (feature_select.py) select about 6-8 features out of 41 OHLCV and its technical data, In total, there are 121 features (may varies on different machine as the algorithm is not seeded) with about 36 stock feature data and the rest are context feature data. 
 
 When trading is executed, 121 features along with total asset, current asset holdings and unrealized profit and loss will form a complete state space for the agent to trade and learn. The state space is designed to allow the agent to get a sense of the instantaneous environment in addition to how its interactions with the environment affects future state space. In another words, the trading agent bears the fruits and consequences of its own actions. 
 
@@ -60,8 +60,8 @@ Trading agent survived the major market correction in 2018 with 1.13 Sharpe rati
 ![Testing trained model with one iteration][image2]
 
 ### Compare agent's performance with other trading strategies
-DDPG is the best performer in terms of cumulative returns. However with a much less volatile ride, RNN-LSTM model has the highest Sharpe ratio (1.88) and Sortino ratio (3.06). Both RNN-LSTM and DRL-DDPG modelled trading strategies have trading costs: commission (based on Interactive Broker's fee) and slippage (modelled by Zipline and based on stock's daily volume) incorporated since there are many transactions during the trading window. The other buy-and-hold strategies' trading costs are omitted since there is stocks are only transacted once. 
-DDPG's reward system shall be modified to yield higher Sharpe and Sortino ratio. 
+DDPG is the best performer in terms of cumulative returns. However with a much less volatile ride, RNN-LSTM model has better risk-adjusted return: the highest Sharpe ratio (1.88) and Sortino ratio (3.06). Both RNN-LSTM and DRL-DDPG modelled trading strategies have trading costs: commission (based on Interactive Broker's fee) and slippage (modelled by Zipline and based on stock's daily volume) incorporated since there are many transactions during the trading window. The other buy-and-hold strategies' trading costs are omitted since there is stocks are only transacted once. 
+DDPG's reward system shall be modified to yield higher risk-adjusted return. 
 For a fair comparison, LSTM model uses the same training data and similar backtester as DDPG model.
 
 ![Trading strategy performance returns comparison][image3]
