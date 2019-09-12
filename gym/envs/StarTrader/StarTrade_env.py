@@ -62,7 +62,6 @@ stock_price = dataset.components_df_o[non_corr_stocks]
 stock_volume = dataset.components_df_v[non_corr_stocks]
 stock_price.to_csv('./data/ddpg_stock_price.csv')
 
-print("Feature length", feature_length)
 print("\n")
 print("Base on non-correlation preference, {} stocks are selected for portfolio construction:".format(NUMBER_NON_CORR_STOCKS))
 
